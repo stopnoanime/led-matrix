@@ -1,0 +1,37 @@
+name: Node.js CI
+
+defaults:
+  run:
+    working-directory: ./web-app/
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: './web-app/package-lock.json'
+    - run: npm ci
+    - run: npm run build-gh
+    - name: Deploy 🚀
+      uses: JamesIves/github-pages-deploy-action@v4.3.0
+      with:
+        branch: gh-pages # The branch the action should deploy to.
+        folder: web-app/dist/web-app # The folder the action should deploy.
