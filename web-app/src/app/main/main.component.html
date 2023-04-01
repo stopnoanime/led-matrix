@@ -110,15 +110,13 @@
 
           <div class="flex items-center gap-2">
             <span class="text">Speed: </span>
-            <mat-slider
-              title="Speed selection"
-              min="0.05"
-              max="1"
-              step="0.01"
-              value="0.5"
-              (change)="print.printSpeed = $event.value!"
-              class="w-full"
-            ></mat-slider>
+            <mat-slider min="0.05" max="1" step="0.01" class="!w-full">
+              <input
+                value="0.5"
+                matSliderThumb
+                (input)="sliderChange($event)"
+              />
+            </mat-slider>
           </div>
         </div>
       </div>

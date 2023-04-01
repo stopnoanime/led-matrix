@@ -25,4 +25,8 @@ export class MainComponent implements OnInit {
       }
     }
   }
+
+  sliderChange(event: Event) {
+    this.print.printSpeed = +(event.target as HTMLInputElement).value;
+  }
 }
