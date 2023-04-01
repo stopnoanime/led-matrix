@@ -5,26 +5,22 @@ import { SerialService } from '../serial.service';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
-  styleUrls: ['./main.component.scss']
+  styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
-
   textAreaValue = '';
-  
+
   constructor(public serial: SerialService, public print: PrintService) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   async connectDisconnect() {
-    if(this.serial.serialConnected) { 
+    if (this.serial.serialConnected) {
       this.serial.disconnect();
-    }
-    else {
+    } else {
       try {
         await this.serial.connect();
-      }
-      catch (err) {
+      } catch (err) {
         alert(`There was an error opening the serial port: ${err}`);
       }
     }

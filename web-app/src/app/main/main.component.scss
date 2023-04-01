@@ -1,15 +1,15 @@
 .btn {
-    @apply bg-gray-900 hover:bg-gray-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-2 px-3 rounded-md inline-block;
+  @apply bg-gray-900 hover:bg-gray-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-2 px-3 rounded-md inline-block;
 }
 
 .text {
-    @apply bg-gray-500 text-white font-bold py-2 px-3 rounded-md inline-block;
+  @apply bg-gray-500 text-white font-bold py-2 px-3 rounded-md inline-block;
 }
 
 .card {
-    @apply bg-gray-100 p-4 rounded-3xl mb-4 lg:mb-0;
+  @apply bg-gray-100 p-4 rounded-3xl mb-4 lg:mb-0;
 }
 
 .txt-area {
-    @apply resize-none w-full h-full bg-gray-50 outline-none p-4;
+  @apply resize-none w-full h-full bg-gray-50 outline-none p-4;
 }

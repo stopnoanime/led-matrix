@@ -10,11 +10,14 @@ bool framebuffer[8][8];
 uint8_t refresh_row = 0;
 
 void drive_row(){
-  digitalWrite(pin_row[refresh_row],HIGH);
+  digitalWrite(pin_row[refresh_row], HIGH);
+
   refresh_row++;
   if(refresh_row == 8) refresh_row = 0;
+
   for(int i=0;i<8;i++) digitalWrite(pin_col[i],framebuffer[i][refresh_row]);
-  digitalWrite(pin_row[refresh_row],LOW);
+
+  digitalWrite(pin_row[refresh_row], LOW);
 }
 
 void setup(){
@@ -41,9 +44,11 @@ void loop(){
         uint8_t tmp = Serial.read();
         for (int j=0;j<8;j++) framebuffer[j][i] = (tmp & (1<<j)) != 0;
       }
+      
       Serial.write(0x55);
     }
     else{
+      //Invalid data, flush serial buffer
       Serial.write(0xFF);
       while(Serial.available()) Serial.read();
     }

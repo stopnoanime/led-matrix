@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SerialService {
-
-  public serialAvailable = "serial" in navigator;
+  public serialAvailable = 'serial' in navigator;
   public serialConnected = false;
 
   private port: SerialPort | null = null;
@@ -14,25 +13,24 @@ export class SerialService {
   constructor() {}
 
   public async connect() {
-    this.serialConnected = false
+    this.serialConnected = false;
 
     try {
       this.port = await navigator.serial.requestPort();
-      await this.port.open({baudRate: this.baudRate});
+      await this.port.open({ baudRate: this.baudRate });
       this.serialConnected = true;
-    }
-    catch (err) {
-      if((err as DOMException).name != 'NotFoundError') throw err //Ignore this error, it is caused by user closing the menu
+    } catch (err) {
+      if ((err as DOMException).name != 'NotFoundError') throw err; //Ignore this error, it is caused by user closing the menu
     }
   }
 
   public async disconnect() {
-    this.serialConnected = false
-    await this.port?.close()
+    this.serialConnected = false;
+    await this.port?.close();
   }
 
   public async send(data: Uint8Array) {
-    if(!this.serialConnected || this.port == null) return
+    if (!this.serialConnected || this.port == null) return;
 
     const writer = this.port.writable!.getWriter();
     await writer.write(data);
