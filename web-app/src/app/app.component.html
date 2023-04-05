@@ -1,11 +1,11 @@
 <div
-  class="flex flex-col items-center justify-evenly gap-8 min-h-screen p-4 px-6"
+  class="flex flex-col items-center justify-evenly gap-6 min-h-screen p-2 sm:py-4 sm:px-6"
 >
-  <div class="text-3xl sm:text-6xl font-light">
+  <div class="text-2xl sm:text-5xl font-light">
     8x8 LED Matrix Driver
     <a
       href="https://github.com/stopnoanime/led-matrix"
-      class="inline-block w-6 sm:w-12"
+      class="inline-block w-6 sm:w-10"
     >
       <img src="assets/github.svg " />
     </a>
@@ -13,15 +13,15 @@
 
   <div
     *ngIf="serial.serialAvailable"
-    class="grid w-full max-w-7xl gap-4 md:grid-cols-2 md:grid-rows-3"
+    class="grid w-full max-w-7xl gap-4 sm:grid-cols-2"
   >
     <app-dot-display
-      class="row-span-3 card"
+      class="row-span-2 card"
       [frameBuff]="print.webFrameBuff"
     ></app-dot-display>
 
     <app-text-input
-      class="row-span-2 card"
+      class="card"
       [(text)]="print.text"
       [textOutBefore]="print.textOutBefore"
       [textOutHighlight]="print.textOutHighlight"

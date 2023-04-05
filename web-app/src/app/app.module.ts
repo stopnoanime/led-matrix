@@ -8,6 +8,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { DotDisplayComponent } from './dot-display/dot-display.component';
 import { TextInputComponent } from './text-input/text-input.component';
 import { SettingsMenuComponent } from './settings-menu/settings-menu.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { SettingsMenuComponent } from './settings-menu/settings-menu.component';
     FormsModule,
     BrowserAnimationsModule,
     MatSliderModule,
+    MatTooltipModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

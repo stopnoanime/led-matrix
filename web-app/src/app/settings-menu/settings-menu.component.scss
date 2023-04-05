@@ -1,7 +1,14 @@
-.btn {
-  @apply bg-gray-900 hover:bg-gray-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-2 px-3 rounded-md inline-block;
+%shape {
+  @apply text-white font-bold py-2 px-3 rounded-md inline-block;
 }
 
-.text {
-  @apply bg-gray-500 text-white font-bold py-2 px-3 rounded-md inline-block;
+button,
+select {
+  @extend %shape;
+  @apply bg-gray-900 hover:bg-gray-700 disabled:bg-gray-300 disabled:cursor-not-allowed outline-2 outline-blue-500;
+}
+
+label {
+  @extend %shape;
+  @apply bg-gray-500;
 }

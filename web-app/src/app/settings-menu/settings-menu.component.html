@@ -1,47 +1,48 @@
-<div class="grid grid-rows-3 grid-cols-1 h-full items-center gap-2">
-  <div class="flex items-center justify-center gap-4">
+<div class="grid h-full gap-2">
+  <div class="flex items-center justify-evenly gap-4 flex-wrap">
     <button
-      [title]="
+      [matTooltip]="
         serialConnected
           ? 'Disconnect from serial device'
           : 'Connect to serial device'
       "
       type="button"
-      class="btn self-start"
       (click)="connectDisconnect.emit()"
     >
       {{ serialConnected ? "Disconnect" : "Connect" }}
     </button>
 
     <button
-      [title]="printActive ? 'Stop animation' : 'Start animation'"
       type="button"
-      class="btn"
       (click)="startStop.emit()"
       [disabled]="!serialConnected"
     >
       {{ printActive ? "Stop" : "Start" }}
     </button>
+
+    <div class="flex gap-2 flex-wrap">
+      <label for="dir">Direction:</label>
+      <select
+        id="dir"
+        [(ngModel)]="animationType"
+        (ngModelChange)="animationTypeChange.emit($event)"
+      >
+        <option value="left">right -> left</option>
+        <option value="up">down -> up</option>
+        <option value="no">no scrolling</option>
+      </select>
+    </div>
   </div>
 
-  <div class="flex justify-center items-center gap-2">
-    <span class="text">Direction:</span>
-    <select
-      title="Direction selection"
-      class="btn border-none"
-      [(ngModel)]="animationType"
-      (ngModelChange)="animationTypeChange.emit($event)"
-    >
-      <option value="left">right -> left</option>
-      <option value="up">down -> up</option>
-      <option value="no">no scrolling</option>
-    </select>
-  </div>
-
-  <div class="flex items-center gap-2">
-    <span class="text">Speed: </span>
-    <mat-slider min="0.05" max="1" step="0.01" class="!w-full">
-      <input value="0.5" matSliderThumb (input)="sliderChange($event)" />
+  <div class="flex items-center flex-wrap gap-2">
+    <label for="slider">Speed: </label>
+    <mat-slider min="0.05" max="1" step="0.01" class="flex-auto">
+      <input
+        id="slider"
+        value="0.5"
+        matSliderThumb
+        (input)="sliderChange($event)"
+      />
     </mat-slider>
   </div>
 </div>
