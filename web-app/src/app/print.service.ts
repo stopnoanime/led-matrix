@@ -6,17 +6,19 @@ import { SerialService } from './serial.service';
   providedIn: 'root',
 })
 export class PrintService {
-  /** The text before the currently drawn character */
-  public textOutB = '';
-  /** The currently drawn character */
-  public textOutH = '';
-  /** The text after the currently drawn character */
-  public textOutA = '';
-
+  /** Text that is going to be printed */
+  public text = '';
   public printActive = false;
   public printSpeed = 0.5;
   public animationType: animationType = 'left';
   public webFrameBuff: boolean[] = new Array(64).fill(false);
+
+  /** The text before the currently drawn character */
+  public textOutBefore = '';
+  /** The currently drawn character */
+  public textOutHighlight = '';
+  /** The text after the currently drawn character */
+  public textOutAfter = '';
 
   private textToPrint = '';
   private strPos = 0;
@@ -27,8 +29,13 @@ export class PrintService {
 
   constructor(private serial: SerialService) {}
 
-  public startPrint(text: string) {
-    this.textToPrint = text;
+  public startStop() {
+    if (this.printActive) this.stopPrint();
+    else this.startPrint();
+  }
+
+  public startPrint() {
+    this.textToPrint = this.text;
     const lastChar = this.textToPrint.slice(-1);
     if (lastChar != ' ' && lastChar != '\n') this.textToPrint += ' '; //Add trailing space
 
@@ -131,9 +138,9 @@ export class PrintService {
   }
 
   private setTextOut(pos: number) {
-    this.textOutB = this.textToPrint.slice(0, pos);
-    this.textOutH = this.textToPrint.slice(pos, pos + 1);
-    this.textOutA = this.textToPrint.slice(pos + 1);
+    this.textOutBefore = this.textToPrint.slice(0, pos);
+    this.textOutHighlight = this.textToPrint.slice(pos, pos + 1);
+    this.textOutAfter = this.textToPrint.slice(pos + 1);
   }
 }
 

@@ -1,0 +1,18 @@
+<div
+  class="h-full flex flex-col rounded-2xl overflow-hidden border-2 border-gray-300 outline-none focus-within:border-gray-900"
+  style="min-height: 300px"
+>
+  <textarea
+    [(ngModel)]="text"
+    (ngModelChange)="textChange.emit($event)"
+    *ngIf="!printActive; else elseBlock"
+    class="txt-area"
+    placeholder="Input your text here."
+    title="Only supports basic ASCII characters"
+  ></textarea>
+
+  <ng-template #elseBlock>
+    <!-- prettier-ignore -->
+    <div class="txt-area whitespace-pre-wrap overflow-y-auto break-all">{{ textOutBefore }}<span class="bg-gray-500 text-white opacity-60">{{ textOutHighlight }}</span>{{ textOutAfter }}</div>
+  </ng-template>
+</div>

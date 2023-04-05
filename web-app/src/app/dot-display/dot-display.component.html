@@ -1,0 +1,12 @@
+<div class="grid place-items-center h-full">
+  <div
+    class="grid grid-cols-8 grid-rows-8 gap aspect-square w-full"
+    style="gap: 1%"
+  >
+    <span
+      *ngFor="let pixel of frameBuff"
+      class="rounded-full bg-gray-400"
+      [ngClass]="pixel ? 'bg-gray-900' : 'bg-gray-400'"
+    ></span>
+  </div>
+</div>

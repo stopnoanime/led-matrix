@@ -1,0 +1,47 @@
+<div
+  class="flex flex-col items-center justify-evenly gap-8 min-h-screen p-4 px-6"
+>
+  <div class="text-3xl sm:text-6xl font-light">
+    8x8 LED Matrix Driver
+    <a
+      href="https://github.com/stopnoanime/led-matrix"
+      class="inline-block w-6 sm:w-12"
+    >
+      <img src="assets/github.svg " />
+    </a>
+  </div>
+
+  <div
+    *ngIf="serial.serialAvailable"
+    class="grid w-full max-w-7xl gap-4 md:grid-cols-2 md:grid-rows-3"
+  >
+    <app-dot-display
+      class="row-span-3 card"
+      [frameBuff]="print.webFrameBuff"
+    ></app-dot-display>
+
+    <app-text-input
+      class="row-span-2 card"
+      [(text)]="print.text"
+      [textOutBefore]="print.textOutBefore"
+      [textOutHighlight]="print.textOutHighlight"
+      [textOutAfter]="print.textOutAfter"
+      [printActive]="print.printActive"
+    ></app-text-input>
+
+    <app-settings-menu
+      class="card"
+      [serialConnected]="serial.serialConnected"
+      [printActive]="print.printActive"
+      [(animationType)]="print.animationType"
+      (printSpeedChange)="print.printSpeed = $event"
+      (connectDisconnect)="connectDisconnect()"
+      (startStop)="print.startStop()"
+    ></app-settings-menu>
+  </div>
+
+  <span *ngIf="!serial.serialAvailable" class="text-2xl font-light">
+    Your browser doesn't support the Web Serial API. Try using a different
+    browser.
+  </span>
+</div>

@@ -19,3 +19,7 @@ $web-app-theme: mat.define-light-theme(
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html {
+  @apply bg-gray-300;
+}
