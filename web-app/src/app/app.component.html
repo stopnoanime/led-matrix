@@ -1,7 +1,7 @@
 <div
-  class="flex flex-col items-center justify-evenly gap-6 min-h-screen p-2 sm:py-4 sm:px-6"
+  class="flex flex-col items-center justify-evenly gap-2 min-h-screen p-2 sm:py-4 sm:px-6"
 >
-  <div class="text-2xl sm:text-5xl font-light">
+  <div class="text-2xl sm:text-5xl font-light text-center">
     8x8 LED Matrix Driver
     <a
       href="https://github.com/stopnoanime/led-matrix"
@@ -35,12 +35,12 @@
       [printActive]="print.printActive"
       [(animationType)]="print.animationType"
       (printSpeedChange)="print.printSpeed = $event"
-      (connectDisconnect)="connectDisconnect()"
+      (connectDisconnect)="serial.connectDisconnect()"
       (startStop)="print.startStop()"
     ></app-settings-menu>
   </div>
 
-  <span *ngIf="!serial.serialAvailable" class="text-2xl font-light">
+  <span *ngIf="!serial.serialAvailable" class="text-2xl font-light text-center">
     Your browser doesn't support the Web Serial API. Try using a different
     browser.
   </span>

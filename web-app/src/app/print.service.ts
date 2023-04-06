@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { asyncScheduler, delay, Subscription } from 'rxjs';
 import font from './font';
 import { SerialService } from './serial.service';
 
@@ -11,6 +12,7 @@ export class PrintService {
   public printActive = false;
   public printSpeed = 0.5;
   public animationType: animationType = 'left';
+  /** Contains data that is displayed on the real LED Matrix represented as a single dimension array */
   public webFrameBuff: boolean[] = new Array(64).fill(false);
 
   /** The text before the currently drawn character */
@@ -25,16 +27,23 @@ export class PrintService {
   private frameNumber = 0;
   private charBitMap: number[] = [];
   private frameBuff = new Uint8Array(8);
-  private timeoutID!: number;
+  private frameSubscription?: Subscription;
 
-  constructor(private serial: SerialService) {}
+  constructor(private serial: SerialService) {
+    serial.disconnectEvent.subscribe(() => this.stopPrint());
+  }
 
+  /** Stops printing if it is already active, otherwise starts printing */
   public startStop() {
     if (this.printActive) this.stopPrint();
     else this.startPrint();
   }
 
+  /** Starts printing text */
   public startPrint() {
+    if (this.printActive) return;
+
+    //Prepare text
     this.textToPrint = this.text;
     const lastChar = this.textToPrint.slice(-1);
     if (lastChar != ' ' && lastChar != '\n') this.textToPrint += ' '; //Add trailing space
@@ -46,44 +55,36 @@ export class PrintService {
     this.setTextOut(0);
 
     this.printActive = true;
-    this.setPrintTimeout();
+    this.print();
   }
 
+  /** Stops printing text */
   public stopPrint() {
+    if (!this.printActive) return;
+
     this.printActive = false;
 
-    clearTimeout(this.timeoutID);
+    this.frameSubscription?.unsubscribe();
 
     this.frameBuff.fill(0);
     this.sendFrameBuff(this.frameBuff);
     this.setWebFrameBuff(this.frameBuff);
   }
 
-  private setPrintTimeout() {
-    if (!this.serial.serialConnected)
-      this.stopPrint(); //Stop printing if serial is not connected
-    else if (this.printActive)
-      this.timeoutID = window.setTimeout(
-        () => this.print(),
-        50 / this.printSpeed
-      );
-  }
-
+  /** Main execution loop */
   private print() {
+    //Starting to print new char
     if (this.frameNumber == 0) {
-      //Starting to print new char
       this.setTextOut(this.strPos);
 
       let charCode = this.textToPrint.charCodeAt(this.strPos);
       if (charCode > 127) charCode = 0x1f; //Show block if the char isn't basic ASCII
 
       this.charBitMap = font[charCode];
-
-      this.strPos++;
-      if (this.strPos == this.textToPrint.length) this.strPos = 0;
+      this.strPos = ++this.strPos % this.textToPrint.length;
     }
 
-    this.setFrameBuff(
+    this.updateFrameBuff(
       this.frameBuff,
       this.charBitMap,
       this.animationType,
@@ -92,13 +93,16 @@ export class PrintService {
     this.sendFrameBuff(this.frameBuff);
     this.setWebFrameBuff(this.frameBuff);
 
-    this.frameNumber++;
-    if (this.frameNumber == 8) this.frameNumber = 0;
+    this.frameNumber = ++this.frameNumber % 8;
 
-    this.setPrintTimeout();
+    this.frameSubscription = asyncScheduler.schedule(
+      () => this.print(),
+      50 / this.printSpeed
+    );
   }
 
-  private setFrameBuff(
+  /** Updates frame buffer based on animation type, frame number and current character */
+  private updateFrameBuff(
     frameBuff: Uint8Array,
     bitMap: number[],
     animationType: animationType,
@@ -124,19 +128,21 @@ export class PrintService {
     }
   }
 
+  /** Outputs frame buffer to serial port */
   private sendFrameBuff(frameBuff: Uint8Array) {
-    const data = new Uint8Array([0x55, ...frameBuff]);
-    this.serial.send(data);
+    this.serial.send(new Uint8Array([0x55, ...frameBuff]));
   }
 
+  /** Converts frameBuffer to a more web friendly format */
   private setWebFrameBuff(frameBuff: Uint8Array) {
-    for (let i = 0; i < 8; i++) {
-      for (let j = 0; j < 8; j++) {
-        this.webFrameBuff[i * 8 + j] = !!(frameBuff[i] & (0x80 >> j));
+    for (let y = 0; y < 8; y++) {
+      for (let x = 0; x < 8; x++) {
+        this.webFrameBuff[y * 8 + x] = !!(frameBuff[y] & (0x80 >> x));
       }
     }
   }
 
+  /** Highlights currently drawn character */
   private setTextOut(pos: number) {
     this.textOutBefore = this.textToPrint.slice(0, pos);
     this.textOutHighlight = this.textToPrint.slice(pos, pos + 1);
