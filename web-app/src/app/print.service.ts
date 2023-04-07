@@ -27,10 +27,13 @@ export class PrintService {
   private frameNumber = 0;
   private charBitMap: number[] = [];
   private frameBuff = new Uint8Array(8);
-  private frameSubscription?: Subscription;
+  private timerWorker: Worker;
 
   constructor(private serial: SerialService) {
     serial.disconnectEvent.subscribe(() => this.stopPrint());
+
+    this.timerWorker = new Worker(new URL('./timer.worker', import.meta.url));
+    this.timerWorker.onmessage = () => this.print();
   }
 
   /** Stops printing if it is already active, otherwise starts printing */
@@ -64,7 +67,7 @@ export class PrintService {
 
     this.printActive = false;
 
-    this.frameSubscription?.unsubscribe();
+    this.timerWorker.postMessage({ action: 'stop' });
 
     this.frameBuff.fill(0);
     this.sendFrameBuff(this.frameBuff);
@@ -73,6 +76,8 @@ export class PrintService {
 
   /** Main execution loop */
   private print() {
+    if (!this.printActive) return;
+
     //Starting to print new char
     if (this.frameNumber == 0) {
       this.setTextOut(this.strPos);
@@ -95,10 +100,10 @@ export class PrintService {
 
     this.frameNumber = ++this.frameNumber % 8;
 
-    this.frameSubscription = asyncScheduler.schedule(
-      () => this.print(),
-      50 / this.printSpeed
-    );
+    this.timerWorker.postMessage({
+      action: 'start',
+      time: 50 / this.printSpeed,
+    });
   }
 
   /** Updates frame buffer based on animation type, frame number and current character */

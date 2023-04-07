@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -16,6 +16,8 @@ export class SerialService {
 
   private port?: SerialPort;
   private writer?: WritableStreamDefaultWriter<Uint8Array>;
+
+  constructor(private zone: NgZone) {}
 
   /**
    * Disconnects from serial if it is already connected to it, otherwise tries to connect to one.
@@ -39,7 +41,7 @@ export class SerialService {
       this.port = await navigator.serial.requestPort();
 
       await this.port.open({ baudRate: this.baudRate });
-      this.port.ondisconnect = () => this.disconnect();
+      this.port.ondisconnect = () => this.zone.run(() => this.disconnect());
       this.writer = this.port.writable!.getWriter();
 
       this.serialConnected = true;
