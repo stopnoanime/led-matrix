@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { asyncScheduler, delay, Subscription } from 'rxjs';
 import font from './font';
 import { SerialService } from './serial.service';
 
@@ -10,6 +9,7 @@ export class PrintService {
   /** Text that is going to be printed */
   public text = '';
   public printActive = false;
+  /** Printing frequency = printSpeed * 20Hz */
   public printSpeed = 0.5;
   public animationType: animationType = 'left';
   /** Contains data that is displayed on the real LED Matrix represented as a single dimension array */
@@ -54,8 +54,6 @@ export class PrintService {
     //Reset values
     this.strPos = 0;
     this.frameNumber = 0;
-    this.frameBuff.fill(0);
-    this.setTextOut(0);
 
     this.printActive = true;
     this.print();
