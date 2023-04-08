@@ -24,9 +24,9 @@ export class SerialService {
    *
    * Any serial port errors emitted from the inside this function are passed to the `errorEvent` subject.
    */
-  async connectDisconnect() {
+  async connectDisconnectUI() {
     try {
-      if (this.serialConnected) this.disconnect();
+      if (this.serialConnected) await this.disconnect();
       else await this.connect();
     } catch (err: any) {
       this.errorEvent.next(err.message);

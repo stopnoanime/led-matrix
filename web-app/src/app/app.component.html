@@ -35,7 +35,7 @@
       [printActive]="print.printActive"
       [(animationType)]="print.animationType"
       (printSpeedChange)="print.printSpeed = $event"
-      (connectDisconnect)="serial.connectDisconnect()"
+      (connectDisconnect)="serial.connectDisconnectUI()"
       (startStop)="print.startStop()"
     ></app-settings-menu>
   </div>
