@@ -24,9 +24,7 @@ describe('PrintService', () => {
       onmessage: () => {},
       postMessage: jasmine.createSpy(),
     };
-    (Worker as any) = function () {
-      return mockTimerWorker;
-    };
+    spyOn(window, 'Worker').and.returnValue(mockTimerWorker as any);
 
     TestBed.configureTestingModule({
       providers: [
