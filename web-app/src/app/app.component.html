@@ -34,7 +34,7 @@
       [serialConnected]="serial.serialConnected"
       [printActive]="print.printActive"
       [(animationType)]="print.animationType"
-      (printSpeedChange)="print.printSpeed = $event"
+      [(printSpeed)]="print.printSpeed"
       (connectDisconnect)="serial.connectDisconnectUI()"
       (startStop)="print.startStop()"
     ></app-settings-menu>

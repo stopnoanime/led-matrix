@@ -13,6 +13,7 @@ export class SettingsMenuComponent {
   @Input() animationType?: animationType;
   @Output() animationTypeChange = new EventEmitter<animationType>();
 
+  @Input() printSpeed?: number;
   @Output() printSpeedChange = new EventEmitter<number>();
 
   @Output() connectDisconnect = new EventEmitter<void>();
