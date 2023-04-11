@@ -1,5 +1,5 @@
 <div class="grid h-full gap-2">
-  <div class="flex items-center justify-evenly gap-4 flex-wrap">
+  <div class="flex items-center justify-around gap-4 flex-wrap">
     <button
       [matTooltip]="
         serialConnected
@@ -7,6 +7,7 @@
           : 'Connect to serial device'
       "
       type="button"
+      class="w-28"
       (click)="connectDisconnect.emit()"
     >
       {{ serialConnected ? "Disconnect" : "Connect" }}
@@ -14,6 +15,7 @@
 
     <button
       type="button"
+      class="w-16"
       (click)="startStop.emit()"
       [disabled]="!serialConnected"
     >
