@@ -52,6 +52,7 @@ $light-theme: mat.define-light-theme(
 
 html {
   @apply bg-gray-300;
+  font-family: "Noto Sans", sans-serif;
 }
 
 body {
