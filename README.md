@@ -11,4 +11,7 @@ It is hosted on [Github Pages](https://stopnoanime.github.io/led-matrix/) using 
 - USB to UART adapter
 - 8x8 LED matrix
 
-![image of board](https://github.com/stopnoanime/led-matrix/blob/main/hardware.jpg)
+![image of board](hardware.jpg) 
+
+# Schematic
+![schematic](schematic.jpg)
