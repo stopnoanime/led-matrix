@@ -4,6 +4,8 @@ Arduino code and a Angular Web app for driving a 8x8 LED Matrix.
 You can see it in action [here](https://youtu.be/ep3m4p4XYZE).
 
 # Software
+![screenshot](screenshot.png) 
+
 An Angular Web App that uses the [Web Serial API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API) to communicate with the Arduino.
 
 It is hosted on [Github Pages](https://stopnoanime.github.io/led-matrix/) using a CI/CD Github Action.
